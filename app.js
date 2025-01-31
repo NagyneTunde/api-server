@@ -1,22 +1,22 @@
-const todos = [
-  {
-    id: 1,
-    task: "reggelit készíteni",
-    completed: false,
-  },
-  {
-    id: 2,
-    task: "elindulni munkába",
-    completed: false,
-  },
-  {
-    id: 3,
-    task: "dolgozni",
-    completed: false,
-  },
-  {
-    id: 4,
-    task: "hazamenni munkából",
-    completed: false,
-  },
-];
+const express = require("express");
+const app = express();
+
+// todo lista importálása
+const todos = require("./todos");
+
+console.log(__dirname);
+
+// api endpoints
+app.get("/", (req, res) => {
+  res.send("Hello World");
+});
+
+app.get("/test", (req, res) => {
+  //res.send("<h1>Tündi</h1>");
+  res.sendFile(`${__dirname}/public/test.html`);
+});
+
+// szerver indítása
+app.listen(3000, () => {
+  console.log(`Server is run on port 3000`);
+});
