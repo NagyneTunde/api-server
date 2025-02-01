@@ -76,6 +76,20 @@ app.put("/todos/:id", (req, res) => {
     .json({ message: `Todo ${todoId} successfully updated`, data: todo });
 });
 
+// delete
+app.delete("/todos/:id", (res, req) => {
+  const todoId = req.params.id;
+  const todoIndex = todos.findIndex((todo) => todo.id === todoId);
+
+  if (todoIndex === -1) {
+    return res
+      .status(404)
+      .json({ message: `Todo not found with id: ${res.params.id}` });
+  }
+  todos.splice(todoIndex, 1);
+  res.status(204).send();
+});
+
 // szerver indítása
 app.listen(3000, () => {
   console.log(`Server is run on port 3000`);
