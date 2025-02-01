@@ -24,10 +24,10 @@ app.get("/test", (req, res) => {
 
 // list of todos
 app.get("/todos", (req, res) => {
-  if (req.query.id !== undefined) {
-    const id = Number(req.query.id);
-    const searchedTodo = todos.filter((todo) => todo.id === id);
-    res.status(200).json(searchedTodo);
+  if (req.query.completed != undefined) {
+    const completed = Boolean(req.query.completed);
+    const completedTodos = todos.filter((todo) => todo.completed === completed);
+    res.status(200).json(completedTodos);
   } else {
     res.status(200).json(todos);
   }
@@ -35,8 +35,7 @@ app.get("/todos", (req, res) => {
 
 // get single todo
 app.get("/todos/:id", (req, res) => {
-  const searchedId = Number(req.params.id);
-  const todo = todos.find((todo) => todo.id === searchedId);
+  const todo = todos.find((todo) => todo.id === req.params.id);
   if (!todo) {
     return res
       .status(404)
