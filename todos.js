@@ -1,4 +1,5 @@
 const todos = [];
+const archivedTodos = [1];
 
 // odo lista exportálása
-module.exports = todos;
+module.exports = { todos, archivedTodos };

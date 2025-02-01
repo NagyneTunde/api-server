@@ -2,7 +2,7 @@ const express = require("express");
 const app = express();
 
 // todo lista importálása
-const todos = require("./todos");
+const { todos, archivedTodos } = require("./todos");
 
 const { v4: uuidv4 } = require("uuid");
 const bodyParser = require("body-parser");
@@ -31,6 +31,11 @@ app.get("/todos", (req, res) => {
   } else {
     res.status(200).json(todos);
   }
+});
+
+// list of archived todos
+app.get("/todos/archived-todos", (req, res) => {
+  res.json(archivedTodos);
 });
 
 // get single todo
@@ -86,6 +91,7 @@ app.delete("/todos/:id", (res, req) => {
       .status(404)
       .json({ message: `Todo not found with id: ${res.params.id}` });
   }
+  archivedTodos.push(todos[todoIndex]);
   todos.splice(todoIndex, 1);
   res.status(204).send();
 });
