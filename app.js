@@ -4,7 +4,11 @@ const app = express();
 // todo lista importálása
 const todos = require("./todos");
 
-console.log(__dirname);
+const { v4: uuidv4 } = require("uuid");
+const bodyParser = require("body-parser");
+require("body-parser");
+
+app.use(bodyParser.json());
 
 // api endpoints
 app.get("/", (req, res) => {
@@ -40,6 +44,20 @@ app.get("/todos/:id", (req, res) => {
   } else {
     res.json(todo);
   }
+});
+
+// add new todo
+app.post("/todos", (req, res) => {
+  console.log(req.body);
+  const todo = {
+    id: uuidv4(),
+    task: req.body.task,
+    completed: false,
+  };
+  todos.push(todo);
+  res
+    .status(201)
+    .json({ message: "New todo successfully created", data: todo });
 });
 
 // szerver indítása
