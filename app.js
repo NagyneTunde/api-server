@@ -59,6 +59,23 @@ app.post("/todos", (req, res) => {
     .json({ message: "New todo successfully created", data: todo });
 });
 
+// task update based on id
+app.put("/todos/:id", (req, res) => {
+  const todoId = req.params.id;
+  const todo = todos.find((todo) => todo.id === todoId);
+  if (!todo) {
+    return res
+      .status(404)
+      .json({ message: `Todo not found with ID: ${todoId}` });
+  }
+  todo.task = req.body.task !== undefined ? req.body.task : todo.task;
+  todo.completed =
+    req.body.completed !== undefined ? req.body.completed : todo.completed;
+  res
+    .status(204)
+    .json({ message: `Todo ${todoId} successfully updated`, data: todo });
+});
+
 // szerver indítása
 app.listen(3000, () => {
   console.log(`Server is run on port 3000`);
