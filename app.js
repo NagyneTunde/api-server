@@ -5,9 +5,9 @@ const app = express();
 const { todos, archivedTodos } = require("./todos");
 
 const { v4: uuidv4 } = require("uuid");
-const bodyParser = require("body-parser");
-require("body-parser");
 
+// middleware
+const bodyParser = require("body-parser");
 app.use(bodyParser.json());
 
 // api endpoints
@@ -27,14 +27,14 @@ app.get("/todos", (req, res) => {
   if (req.query.completed != undefined) {
     const completed = Boolean(req.query.completed);
     const completedTodos = todos.filter((todo) => todo.completed === completed);
-    res.status(200).json(completedTodos);
+    res.json(completedTodos);
   } else {
-    res.status(200).json(todos);
+    res.json(todos);
   }
 });
 
 // list of archived todos
-app.get("/todos/archived-todos", (req, res) => {
+app.get("/archived-todos", (req, res) => {
   res.json(archivedTodos);
 });
 
@@ -82,17 +82,19 @@ app.put("/todos/:id", (req, res) => {
 });
 
 // delete
-app.delete("/todos/:id", (res, req) => {
+app.delete("/todos/:id", (req, res) => {
   const todoId = req.params.id;
   const todoIndex = todos.findIndex((todo) => todo.id === todoId);
 
   if (todoIndex === -1) {
     return res
       .status(404)
-      .json({ message: `Todo not found with id: ${res.params.id}` });
+      .json({ message: `Todo not found with ID: ${todoId}` });
   }
   archivedTodos.push(todos[todoIndex]);
+  console.log(archivedTodos);
   todos.splice(todoIndex, 1);
+  console.log(todos);
   res.status(204).send();
 });
 
