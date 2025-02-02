@@ -28,6 +28,26 @@ app.get("/test", (req, res) => {
 // api response
 
 // list of todos
+
+/**
+ * @swagger
+ * /api/todos:
+ *   get:
+ *     summary: Get all todos
+ *     parameters:
+ *       - in: query
+ *         name: completed
+ *         schema:
+ *           type: boolean
+ *         description: Filter todos by completion status (true or false)
+ *     responses:
+ *       '200':
+ *         description: A list of todos
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ */
 app.get("/todos", (req, res) => {
   if (req.query.completed != undefined) {
     const completed = Boolean(req.query.completed);
@@ -39,11 +59,63 @@ app.get("/todos", (req, res) => {
 });
 
 // list of archived todos
+
+/**
+ * @swagger
+ * /api/archived-todos:
+ *   get:
+ *     summary: Get all archived todos
+ *     responses:
+ *       '200':
+ *         description: A list of archived todos
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Todo'
+ */
 app.get("/archived-todos", (req, res) => {
   res.json(archivedTodos);
 });
 
 // get single todo
+
+/**
+ * @swagger
+ * /api/todos/{id}:
+ *   get:
+ *     summary: Get a single todo by ID
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       '200':
+ *         description: A single todo
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 id:
+ *                   type: string
+ *                 task:
+ *                   type: string
+ *                 completed:
+ *                   type: boolean
+ *       '404':
+ *         description: Todo not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ */
 app.get("/todos/:id", (req, res) => {
   const todo = todos.find((todo) => todo.id === req.params.id);
   if (!todo) {
@@ -56,6 +128,30 @@ app.get("/todos/:id", (req, res) => {
 });
 
 // add new todo
+
+/**
+ * @swagger
+ * /api/todos:
+ *   post:
+ *     summary: Create a new todo
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               task:
+ *                 type: string
+ *             example:
+ *               task: New todo item
+ *     responses:
+ *       '201':
+ *         description: Created
+ *       '400':
+ *         description: Bad request
+ */
+
 app.post("/todos", (req, res) => {
   console.log(req.body);
   const todo = {
@@ -70,6 +166,42 @@ app.post("/todos", (req, res) => {
 });
 
 // task update based on id
+
+/**
+ * @swagger
+ * /api/todos/{id}:
+ *   put:
+ *     summary: Update a todo by ID
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               task:
+ *                 type: string
+ *               completed:
+ *                 type: boolean
+ *             example:
+ *               task: New updated value
+ *               completed: true
+ *     responses:
+ *       '200':
+ *         description: Updated todo
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: string
+ *       '404':
+ *         description: Todo not found
+ */
 app.put("/todos/:id", (req, res) => {
   const todoId = req.params.id;
   const todo = todos.find((todo) => todo.id === todoId);
@@ -86,7 +218,25 @@ app.put("/todos/:id", (req, res) => {
     .json({ message: `Todo ${todoId} successfully updated`, data: todo });
 });
 
-// delete
+// delete todo
+
+/**
+ * @swagger
+ * /api/todos/{id}:
+ *   delete:
+ *     summary: Delete a todo by ID
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       '204':
+ *         description: Deleted a todo
+ *       '404':
+ *         description: Todo not found
+ */
 app.delete("/todos/:id", (req, res) => {
   const todoId = req.params.id;
   const todoIndex = todos.findIndex((todo) => todo.id === todoId);
