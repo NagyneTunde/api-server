@@ -5,10 +5,15 @@ const app = express();
 const { todos, archivedTodos } = require("./todos");
 
 const { v4: uuidv4 } = require("uuid");
+const bodyParser = require("body-parser");
+
+// swagger docs
+const swaggerSpecs = require("./swagger");
+const swaggerUi = require("swagger-ui-express");
 
 // middleware
-const bodyParser = require("body-parser");
 app.use(bodyParser.json());
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpecs));
 
 // api endpoints
 app.get("/", (req, res) => {

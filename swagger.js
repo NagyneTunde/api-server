@@ -12,5 +12,5 @@ const options = {
   apis: ["app.js"], // path to your API route files
 };
 
-const specs = swaggerJsDoc();
+const specs = swaggerJsDoc(options);
 module.exports = specs;
