@@ -1,6 +1,6 @@
 # api-server
 
-api-server with node.js and POSTMAN collection
+api-server with node.js, POSTMAN collection, swagger doc
 
 ## Szükséges modulok
 
